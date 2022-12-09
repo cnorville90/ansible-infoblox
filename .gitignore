@@ -1,2 +1,3 @@
 .vault_password.sh
 *.log
+.gitignore

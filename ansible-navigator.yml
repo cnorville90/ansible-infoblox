@@ -1,7 +1,7 @@
 ---
 ansible-navigator:
   execution-environment:
-    image: localhost/ee-infoblox:v1.0
+    image: quay.io/cnorvill/ee-infoblox:v1.0
     pull:
       policy: missing
   playbook-artifact:

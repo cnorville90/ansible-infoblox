@@ -5,10 +5,10 @@
   gather_facts: yes
   vars: 
     networkviewtocreate: The-Rick-James-Network
-    network4tocreate: 192.168.10.0/24
-    network6tocreate: fe80::/64
+    network4tocreate: 192.168.11.0/24
+    network6tocreate: fe81::/64
   vars_files:
-    - vars.yml
+    - nios_vars.yml
 
   tasks: 
 

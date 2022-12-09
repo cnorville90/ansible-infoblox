@@ -4,17 +4,15 @@
   connection: local
   gather_facts: yes
   vars: 
-    networkviewtocreate: The-Rick-James-Network
-    network4tocreate: 192.168.10.0/24
-    network6tocreate: fe80::/64
+    thenetworkview: The-Rick-James-Network
   vars_files:
-    - vars.yml
+    - nios_vars.yml
 
   tasks: 
 
-    - name: "Fetch the list of networks in the networkview {{ networkviewtocreate }}"
+    - name: "Fetch the list of networks in the networkview {{ thenetworkview }}"
       set_fact: 
-        networks: "{{ lookup('infoblox.nios_modules.nios_lookup', 'network', filter={'network_view': networkviewtocreate}, 
+        networks: "{{ lookup('infoblox.nios_modules.nios_lookup', 'network', filter={'network_view': thenetworkview}, 
                       provider=nios_provider) }}"
 
     - name: list the networks

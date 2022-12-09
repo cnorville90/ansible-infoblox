@@ -1,0 +1,27 @@
+---
+- name: Infoblox Playbook
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  vars_files:
+    - nios_vars.yml
+
+  tasks: 
+
+    - name: Fetch all Network Object 
+      set_fact: 
+        networkviews: "{{ lookup('infoblox.nios_modules.nios_lookup', 'networkview', provider=nios_provider) }}"
+
+    - name: check the networkviews
+      debug:
+        var: networkviews
+
+    - name: return next available IP address for network 10.0.0.0/8
+      set_fact: 
+        ipaddr: "{{ lookup('infoblox.nios_modules.nios_next_ip', '10.0.0.0/8', provider=nios_provider) }}"
+
+    
+    - name: check the next ip address
+      debug:
+        var: ipaddr
+

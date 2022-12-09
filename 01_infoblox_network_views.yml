@@ -1,0 +1,33 @@
+---
+- name: A playbook to create a network view in Infoblox / NIOS
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+  vars: 
+    networkviewtocreate: The-Rick-James-Network
+  vars_files:
+    - nios_vars.yml
+
+  tasks: 
+
+    - name: Fetch all Network Object 
+      set_fact: 
+        networkviews: "{{ lookup('infoblox.nios_modules.nios_lookup', 'networkview', provider=nios_provider) }}"
+
+    - name: check the networkviews
+      debug:
+        var: networkviews
+
+    - name: "Create a network view {{ networkviewtocreate }}"
+      infoblox.nios_modules.nios_network_view:
+        name: "{{ networkviewtocreate }}"
+        state: present
+        provider: "{{ nios_provider }}"
+
+    - name: Fetch all Network Object 
+      set_fact: 
+        networkviews: "{{ lookup('infoblox.nios_modules.nios_lookup', 'networkview', provider=nios_provider) }}"
+
+    - name: check the networkviews
+      debug:
+        var: networkviews

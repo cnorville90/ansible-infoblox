@@ -1,0 +1,61 @@
+---
+- name: Infoblox Playbook
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+  vars: 
+    networktocreate: 192.168.200.0/24
+    domain: thenorvilles.com
+  vars_files:
+    - vars.yml
+
+  tasks: 
+
+    - name: "Create a forward zone called {{ domain }}"
+      infoblox.nios_modules.nios_zone:
+        name: "{{ domain }}"
+        comment: "Local DNS Zone"
+        state: present
+        provider: "{{ nios_provider }}"
+
+    - name: "Lets Create a network on the default network view"
+      infoblox.nios_modules.nios_network: 
+        network: "{{ networktocreate }}"
+        comment: "Created by C. Norville - Red Hat"
+        options: 
+                - name: domain-name
+                  value: "{{ domain }}"
+        state: present
+        provider: "{{ nios_provider }}"
+
+    - name: "return next available IP address for network {{ networktocreate }}"
+      set_fact: 
+        ipaddr: "{{ lookup('infoblox.nios_modules.nios_next_ip', networktocreate, provider=nios_provider) }}"
+    
+    - name: check the next ip address
+      debug:
+        var: ipaddr
+
+    - name: Fetch all Network Object 
+      set_fact: 
+        networkviews: "{{ lookup('infoblox.nios_modules.nios_lookup', 'networkview', provider=nios_provider) }}"
+
+    - name: check the networkviews
+      debug:
+        var: networkviews
+
+    - name: fetch the default dns view
+      ansible.builtin.set_fact:
+        dns_views: "{{ lookup('infoblox.nios_modules.nios_lookup', 'view', filter={'name': 'default'}, provider=nios_provider) }}"
+
+    - name: check the dns-views
+      debug:
+        var: dns_views
+
+    - name: return next available network
+      set_fact:
+        networkaddr: "{{ lookup('infoblox.nios_modules.nios_next_network', '10.0.0.0/8', cidr=16, provider=nios_provider) }}"
+
+    - name: check the next available network
+      debug: 
+        var: networkaddr

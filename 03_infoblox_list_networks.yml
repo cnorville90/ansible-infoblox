@@ -1,0 +1,22 @@
+---
+- name: A playbook to create a network for a specified Networkview in Infoblox / NIOS
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+  vars: 
+    networkviewtocreate: The-Rick-James-Network
+    network4tocreate: 192.168.10.0/24
+    network6tocreate: fe80::/64
+  vars_files:
+    - vars.yml
+
+  tasks: 
+
+    - name: "Fetch the list of networks in the networkview {{ networkviewtocreate }}"
+      set_fact: 
+        networks: "{{ lookup('infoblox.nios_modules.nios_lookup', 'network', filter={'network_view': networkviewtocreate}, 
+                      provider=nios_provider) }}"
+
+    - name: list the networks
+      debug:
+        var: networks

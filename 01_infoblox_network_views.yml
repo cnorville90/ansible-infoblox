@@ -1,6 +1,6 @@
 ---
 - name: A playbook to create a network view in Infoblox / NIOS
-  hosts: all
+  hosts: localhost
   connection: local
   gather_facts: yes
   vars: 

@@ -25,6 +25,10 @@
       set_fact:
         networkaddr: "{{ lookup('infoblox.nios_modules.nios_next_network', parent_container, cidr=cidr, provider=nios_provider) }}"
 
+    - name: Let see the next available netowrk...
+      debug: 
+        var: networkaddr
+
     - name: configure a network container in nios
       infoblox.nios_modules.nios_network:
         network: "{{ networkaddr[0] }}"

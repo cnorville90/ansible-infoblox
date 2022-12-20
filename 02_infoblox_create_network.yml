@@ -7,8 +7,13 @@
     networkview: The-Rick-James-Network
     network4tocreate: 192.168.11.0/24
     network6tocreate: fe81::/64
-  vars_files:
-    - nios_vars.yml
+    nios_provider:
+      host: "{{ nios_grid_ip }}"
+      username: "{{ nios_username }}"
+      password: "{{ nios_password }}"
+
+    # vars_files:
+    #  - nios_vars.yml
 
   tasks: 
 
